@@ -11,62 +11,52 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo "Using Maven for automated builds"
-                    echo "Using a build automation tool to compile and package the code"
+                    echo "Using Maven for build automation to compile and package the code"
                 }
             }
         }
 
-        stage('Test') {
+        stage('Unit and Integration Tests') {
             steps {
                 script {
-                    echo "Using JUnit for automated unit tests"
+                    echo "Using JUnit for unit tests"
                     echo "Running unit tests"
-                    echo "Using TestNG for integration tests"  // Replace [Tool Name] with the actual tool name for integration tests
+                    echo "Using TestNG for integration tests"
                     echo "Running integration tests"
                 }
             }
-            post {
-                success {
-                    emailext(
-                        subject: "Test Stage - Successful",
-                        body: "All tests (unit and integration) passed successfully.",
-                        to: "harrylying.21@gmail.com"
-                    )
-                }
-                failure {
-                    emailext(
-                        subject: "Test Stage - Failed",
-                        body: "One or more tests failed. Please check the logs for more details.",
-                        to: "harrylying.21@gmail.com"
-                    )
+        }
+
+        stage('Code Analysis') {
+            steps {
+                script {
+                    echo "Using SonarQube for code analysis"
+                    echo "Analyzing code to ensure it meets industry standards"
                 }
             }
         }
 
-        stage('Code Quality Check') {
+        stage('Security Scan') {
             steps {
                 script {
-                    echo "Using SonarQube for code quality checks"
-                    echo "Checking the quality of the code"
+                    echo "Using OWASP ZAP for security scanning"
+                    echo "Performing security scan to identify vulnerabilities"
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to Staging') {
             steps {
                 script {
-                    echo "Using AWS CodeDeploy for deployment"
-                    echo "Deploying the application to the testing environment: ${env.TESTING_ENVIRONMENT}"
+                    echo "Deploying the application to a staging environment (e.g., AWS EC2 instance)"
                 }
             }
         }
 
-        stage('Approval') {
+        stage('Integration Tests on Staging') {
             steps {
                 script {
-                    echo "Waiting for manual approval..."
-                    sleep(time: 10, unit: 'SECONDS')  // Simulate manual approval with a 10-second delay
+                    echo "Running integration tests on the staging environment"
                 }
             }
         }
@@ -74,8 +64,7 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                 script {
-                    echo "Using Kubernetes for production deployment"
-                    echo "Deploying the code to the production environment: ${env.PRODUCTION_ENVIRONMENT}"
+                    echo "Deploying the application to a production environment (e.g., AWS EC2 instance)"
                 }
             }
         }

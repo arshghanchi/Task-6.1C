@@ -60,7 +60,7 @@ pipeline {
                 mail to: 'arsh.ghanchi07@gmail.com',
                  subject: "Pipeline '${currentBuild.fullDisplayName}' failed",
                  body: "The pipeline '${currentBuild.fullDisplayName}' failed. Please check the logs.",
-                 attachLog: true
+              
 }
     }
 }

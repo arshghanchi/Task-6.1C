@@ -1,66 +1,83 @@
 pipeline {
     agent any
 
+    environment {
+        TESTING_ENVIRONMENT = "stage"
+        PRODUCTION_ENVIRONMENT = "farhan"
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'Performing build using Maven'
-                echo 'Maven is a build automation tool used to compile, package, and manage dependencies for Java projects.'
+                script {
+                    echo "Using Maven for automated builds"
+                    echo "Using a build automation tool to compile and package the code"
+                }
             }
         }
 
-        stage('Unit and Integration Tests') {
+        stage('Test') {
             steps {
-                echo 'Running unit tests using JUnit'
-                echo 'Running integration tests using TestNG'
-                echo 'JUnit and TestNG are popular testing frameworks for Java applications.'
+                script {
+                    echo "Using JUnit for automated unit tests"
+                    echo "Running unit tests"
+                    // Replace [Tool Name] with the actual tool name for integration tests
+                    echo "Using [Tool Name] for integration tests"
+                    echo "Running integration tests"
+                }
+            }
+            post {
+                success {
+                    emailext(
+                        subject: "Test Stage - Success",
+                        body: "The test stage has completed successfully.",
+                        to: "harrylying.21@gmail.com",
+                    )
+                }
+                failure {
+                    emailext(
+                        subject: "Test Stage - Failure",
+                        body: "The test stage has failed. Please investigate.",
+                        to: "harrylying.21@gmail.com",
+                    )
+                }
             }
         }
 
-        stage('Code Analysis') {
+        stage('Code Quality Check') {
             steps {
-                echo 'Performing code analysis using SonarQube'
-                echo 'SonarQube is a code quality and security scanning tool that helps identify code smells, bugs, and vulnerabilities.'
+                script {
+                    echo "Using SonarQube for code quality checks"
+                    echo "Checking the quality of the code"
+                }
             }
         }
 
-        stage('Security Scan') {
+        stage('Deploy') {
             steps {
-                echo 'Performing security scan using OWASP ZAP'
-                echo 'OWASP ZAP (Zed Attack Proxy) is a free and open-source web application security scanner.'
+                script {
+                    echo "Using AWS CodeDeploy for deployment"
+                    echo "Deploying the application to the testing environment: $TESTING_ENVIRONMENT"
+                }
             }
         }
 
-        stage('Deploy to Staging') {
+        stage('Approval') {
             steps {
-                echo 'Deploying application to staging environment (e.g., AWS EC2 instance)'
-            }
-        }
-
-        stage('Integration Tests on Staging') {
-            steps {
-                echo 'Running integration tests on staging environment'
+                script {
+                    echo "Waiting for manual approval..."
+                    sleep(time: 10, unit: 'SECONDS')
+                }
             }
         }
 
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying application to production environment (e.g., AWS EC2 instance)'
+                script {
+                    echo "Using Kubernetes for production deployment"
+                    echo "Deploying the code to the production environment: $PRODUCTION_ENVIRONMENT"
+                }
             }
-        }
-    }
-
-    post {
-        success {
-            mail to: 'harrylying.21@gmail.com',
-                 subject: "Pipeline '${currentBuild.fullDisplayName}' succeeded",
-                 body: "The pipeline '${currentBuild.fullDisplayName}' completed successfully."
-        }
-        failure {
-            mail to: 'harrylying.21@gmail.com',
-                 subject: "Pipeline '${currentBuild.fullDisplayName}' failed",
-                 body: "The pipeline '${currentBuild.fullDisplayName}' failed. Please check the logs.",
-                 attachLog: true
         }
     }
 }

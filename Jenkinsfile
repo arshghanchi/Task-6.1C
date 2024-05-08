@@ -52,15 +52,15 @@ pipeline {
 
     post {
         success {
-            mail to: 'arsh.ghanchi07@gmail.com',
+            mail to: 'harrylying.21@gmail.com',
                  subject: "Pipeline '${currentBuild.fullDisplayName}' succeeded",
                  body: "The pipeline '${currentBuild.fullDisplayName}' completed successfully."
         }
         failure {
-                mail to: 'arsh.ghanchi07@gmail.com',
+            mail to: 'harrylying.21@gmail.com',
                  subject: "Pipeline '${currentBuild.fullDisplayName}' failed",
                  body: "The pipeline '${currentBuild.fullDisplayName}' failed. Please check the logs.",
-              
+                 attachLog: true
         }
     }
 }

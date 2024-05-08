@@ -1,9 +1,10 @@
 pipeline {
     agent any
 
+    // Define environment variables
     environment {
         TESTING_ENVIRONMENT = "stage"
-        PRODUCTION_ENVIRONMENT = "farhan"
+        PRODUCTION_ENVIRONMENT = "Arsh Ghanchi"
     }
 
     stages {
@@ -21,24 +22,23 @@ pipeline {
                 script {
                     echo "Using JUnit for automated unit tests"
                     echo "Running unit tests"
-                    // Replace [Tool Name] with the actual tool name for integration tests
-                    echo "Using [Tool Name] for integration tests"
+                    echo "Using TestNG for integration tests"  // Replace [Tool Name] with the actual tool name for integration tests
                     echo "Running integration tests"
                 }
             }
             post {
                 success {
                     emailext(
-                        subject: "Test Stage - Success",
-                        body: "The test stage has completed successfully.",
-                        to: "harrylying.21@gmail.com",
+                        subject: "Test Stage - Successful",
+                        body: "All tests (unit and integration) passed successfully.",
+                        to: "harrylying.21@gmail.com"
                     )
                 }
                 failure {
                     emailext(
-                        subject: "Test Stage - Failure",
-                        body: "The test stage has failed. Please investigate.",
-                        to: "harrylying.21@gmail.com",
+                        subject: "Test Stage - Failed",
+                        body: "One or more tests failed. Please check the logs for more details.",
+                        to: "harrylying.21@gmail.com"
                     )
                 }
             }
@@ -57,7 +57,7 @@ pipeline {
             steps {
                 script {
                     echo "Using AWS CodeDeploy for deployment"
-                    echo "Deploying the application to the testing environment: $TESTING_ENVIRONMENT"
+                    echo "Deploying the application to the testing environment: ${env.TESTING_ENVIRONMENT}"
                 }
             }
         }
@@ -66,7 +66,7 @@ pipeline {
             steps {
                 script {
                     echo "Waiting for manual approval..."
-                    sleep(time: 10, unit: 'SECONDS')
+                    sleep(time: 10, unit: 'SECONDS')  // Simulate manual approval with a 10-second delay
                 }
             }
         }
@@ -75,7 +75,7 @@ pipeline {
             steps {
                 script {
                     echo "Using Kubernetes for production deployment"
-                    echo "Deploying the code to the production environment: $PRODUCTION_ENVIRONMENT"
+                    echo "Deploying the code to the production environment: ${env.PRODUCTION_ENVIRONMENT}"
                 }
             }
         }

@@ -61,6 +61,6 @@ pipeline {
                  subject: "Pipeline '${currentBuild.fullDisplayName}' failed",
                  body: "The pipeline '${currentBuild.fullDisplayName}' failed. Please check the logs.",
               
-}
+        }
     }
 }
